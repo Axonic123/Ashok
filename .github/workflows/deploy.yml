@@ -1,0 +1,38 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          script: |
+            echo "Current working directory: $(pwd)"
+            echo "Writing SSH key to ~/.ssh/id_rsa"
+            echo "${{ secrets.ID_RSA_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            if [ -d "/home/ubuntu/devops-fullstack-app" ]; then
+            echo "Folder exists"
+            rm -rf /home/ubuntu/devops-fullstack-app
+            else
+            echo "Folder does not exist"
+            fi
+            git clone git@github.com:priya8goyal312/devops-fullstack-app.git
+            cd devops-fullstack-app/
+            sudo docker compose down
+            sudo docker-compose up -d
