@@ -26,9 +26,9 @@ jobs:
             echo "Writing SSH key to ~/.ssh/id_rsa"
             echo "${{ secrets.ID_RSA_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
-            if [ -d "/home/ubuntu/devops-fullstack-app" ]; then
+            if [ -d "/home/ubuntu/Ashok" ]; then
             echo "Folder exists"
-            rm -rf /home/ubuntu/devops-fullstack-app
+            rm -rf /home/ubuntu/Ashok
             else
             echo "Folder does not exist"
             fi
